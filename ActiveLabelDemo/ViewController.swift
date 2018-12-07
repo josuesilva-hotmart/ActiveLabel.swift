@@ -29,7 +29,9 @@ class ViewController: UIViewController {
         label.customize { label in
             label.text = "This is a post with #multiple #hashtags and a @userhandle. Links are also supported like" +
             " this one: http://optonaut.co. Now it also supports custom patterns -> are\n\n" +
-                "Let's trim a long link: \nhttps://twitter.com/twicket_app/status/649678392372121601"
+                "Let's trim a long link: \nhttps://twitter.com/twicket_app/status/649678392372121601" +
+                "NSDataDetector ckecking for all types are also sopported like phone numbers: 3199595959 . " +
+            "Week days: monday, tuesday, wednesday, thursday, friday. And all others there https://developer.apple.com/documentation/foundation/nsdatadetector"
             label.numberOfLines = 0
             label.lineSpacing = 4
             
@@ -37,11 +39,14 @@ class ViewController: UIViewController {
             label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
             label.mentionColor = UIColor(red: 238.0/255, green: 85.0/255, blue: 96.0/255, alpha: 1)
             label.URLColor = UIColor(red: 85.0/255, green: 238.0/255, blue: 151.0/255, alpha: 1)
+            label.dataDetectorColor = UIColor(red: 238.0/255, green: 85.0/255, blue: 96.0/255, alpha: 1)
             label.URLSelectedColor = UIColor(red: 82.0/255, green: 190.0/255, blue: 41.0/255, alpha: 1)
+            label.dataDetectorSelectedColor = UIColor(red: 82.0/255, green: 190.0/255, blue: 41.0/255, alpha: 1)
 
             label.handleMentionTap { self.alert("Mention", message: $0) }
             label.handleHashtagTap { self.alert("Hashtag", message: $0) }
             label.handleURLTap { self.alert("URL", message: $0.absoluteString) }
+            label.handleDataDetectorTap { self.alert("Data Detector", message: $0) }
 
             //Custom types
 
@@ -85,4 +90,3 @@ class ViewController: UIViewController {
     }
 
 }
-

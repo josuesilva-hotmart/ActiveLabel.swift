@@ -20,6 +20,8 @@ struct ActiveBuilder {
             return createElements(from: text, for: type, range: range, filterPredicate: filterPredicate)
         case .custom:
             return createElements(from: text, for: type, range: range, minLength: 1, filterPredicate: filterPredicate)
+        case .dataDetector:
+            return createElements(from: text, for: type, range: range)
         }
     }
 
@@ -69,6 +71,33 @@ struct ActiveBuilder {
                 elements.append((match.range, element, type))
             }
         }
+        return elements
+    }
+    
+    private static func createElements(from text: String,
+                                       for type: ActiveType,
+                                       range: NSRange) -> [ElementTuple] {
+        
+        let nsstring = text as NSString
+        var elements: [ElementTuple] = []
+        
+        let detector = try? NSDataDetector(types: NSTextCheckingAllTypes)
+        
+        detector?.enumerateMatches(in: text, options: [], range: range) { match, flags, _ in
+            
+            guard let match = match else {
+                return
+            }
+            
+            guard match.resultType != .link else {
+                return
+            }
+            
+            let word = nsstring.substring(with: match.range)
+            let element = ActiveElement.create(with: type, text: word)
+            elements.append((match.range, element, type))
+        }
+        
         return elements
     }
 
