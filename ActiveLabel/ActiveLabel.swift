@@ -21,7 +21,7 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
     // MARK: - public properties
     open weak var delegate: ActiveLabelDelegate?
 
-    open var enabledTypes: [ActiveType] = [.mention, .hashtag, .url, .dataDetector]
+    open var enabledTypes: [ActiveType] = [.mention, .hashtag, .url, .dataDetector(nil)]
 
     open var urlMaximumLength: Int?
     
@@ -85,7 +85,7 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
         hashtagTapHandler = handler
     }
     
-    open func handleDataDetectorTap(_ handler: @escaping (String) -> ()) {
+    open func handleDataDetectorTap(_ handler: @escaping ((String, NSTextCheckingResult.CheckingType?)) -> ()) {
         dataDetectorTapHandler = handler
     }
     
@@ -251,7 +251,7 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
     internal var mentionTapHandler: ((String) -> ())?
     internal var hashtagTapHandler: ((String) -> ())?
     internal var urlTapHandler: ((URL) -> ())?
-    internal var dataDetectorTapHandler: ((String) -> ())?
+    internal var dataDetectorTapHandler: (((String, NSTextCheckingResult.CheckingType?)) -> ())?
     internal var customTapHandlers: [ActiveType : ((String) -> ())] = [:]
     
     fileprivate var mentionFilterPredicate: ((String) -> Bool)?
@@ -332,8 +332,8 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
             case .mention: attributes[NSAttributedString.Key.foregroundColor] = mentionColor
             case .hashtag: attributes[NSAttributedString.Key.foregroundColor] = hashtagColor
             case .url: attributes[NSAttributedString.Key.foregroundColor] = URLColor
+            case .dataDetector: attributes[NSAttributedString.Key.foregroundColor] = dataDetectorColor
             case .custom: attributes[NSAttributedString.Key.foregroundColor] = customColor[type] ?? defaultCustomColor
-            case .dataDetector: attributes[NSAttributedString.Key.foregroundColor] = customColor[type] ?? defaultCustomColor
             }
             
             if let highlightFont = hightlightFont {
@@ -518,9 +518,9 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
         urlHandler(url)
     }
     
-    fileprivate func didTapDataDetector(_ element: String) {
+    fileprivate func didTapDataDetector(_ element: (String, NSTextCheckingResult.CheckingType?)) {
         guard let dataDetectorHandler = dataDetectorTapHandler else {
-            delegate?.didSelect(element, type: .dataDetector)
+            delegate?.didSelect(element.0, type: .dataDetector(nil))
             return
         }
         dataDetectorHandler(element)

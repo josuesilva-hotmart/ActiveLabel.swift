@@ -94,7 +94,7 @@ struct ActiveBuilder {
             }
             
             let word = nsstring.substring(with: match.range)
-            let element = ActiveElement.create(with: type, text: word)
+            let element = ActiveElement.create(with: type, text: word, type: match.resultType)
             elements.append((match.range, element, type))
         }
         

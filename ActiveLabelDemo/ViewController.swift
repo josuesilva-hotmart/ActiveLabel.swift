@@ -41,12 +41,12 @@ class ViewController: UIViewController {
             label.URLColor = UIColor(red: 85.0/255, green: 238.0/255, blue: 151.0/255, alpha: 1)
             label.dataDetectorColor = UIColor(red: 238.0/255, green: 85.0/255, blue: 96.0/255, alpha: 1)
             label.URLSelectedColor = UIColor(red: 82.0/255, green: 190.0/255, blue: 41.0/255, alpha: 1)
-            label.dataDetectorSelectedColor = UIColor(red: 82.0/255, green: 190.0/255, blue: 41.0/255, alpha: 1)
+            label.dataDetectorSelectedColor = UIColor(red: 238.0/255, green: 85.0/255, blue: 96.0/255, alpha: 1)
 
             label.handleMentionTap { self.alert("Mention", message: $0) }
             label.handleHashtagTap { self.alert("Hashtag", message: $0) }
             label.handleURLTap { self.alert("URL", message: $0.absoluteString) }
-            label.handleDataDetectorTap { self.alert("Data Detector", message: $0) }
+            label.handleDataDetectorTap { self.alert("Data Detector", message: "\(String(describing: $0))") }
 
             //Custom types
 

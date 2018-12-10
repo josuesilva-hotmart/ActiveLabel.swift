@@ -13,15 +13,15 @@ enum ActiveElement {
     case hashtag(String)
     case url(original: String, trimmed: String)
     case custom(String)
-    case dataDetector(String)
+    case dataDetector(String, NSTextCheckingResult.CheckingType?)
 
-    static func create(with activeType: ActiveType, text: String) -> ActiveElement {
+    static func create(with activeType: ActiveType, text: String, type: NSTextCheckingResult.CheckingType? = nil) -> ActiveElement {
         switch activeType {
         case .mention: return mention(text)
         case .hashtag: return hashtag(text)
         case .url: return url(original: text, trimmed: text)
         case .custom: return custom(text)
-        case .dataDetector: return dataDetector(text)
+        case .dataDetector: return dataDetector(text, type)
         }
     }
 }
@@ -30,7 +30,7 @@ public enum ActiveType {
     case mention
     case hashtag
     case url
-    case dataDetector
+    case dataDetector(_ type: NSTextCheckingResult.CheckingType? )
     case custom(pattern: String)
 
     var pattern: String {
