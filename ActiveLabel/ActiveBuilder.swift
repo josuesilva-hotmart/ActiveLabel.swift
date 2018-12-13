@@ -89,10 +89,6 @@ struct ActiveBuilder {
                 return
             }
             
-            guard match.resultType != .link else {
-                return
-            }
-            
             let word = nsstring.substring(with: match.range)
             let element = ActiveElement.create(with: type, text: word, type: match.resultType)
             elements.append((match.range, element, type))
